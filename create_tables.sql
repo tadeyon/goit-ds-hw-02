@@ -1,0 +1,35 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users
+(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	fullname VARCHAR(100) NOT NULL DEFAULT '',
+	email VARCHAR(100) NOT NULL DEFAULT '',
+	CONSTRAINT users_email_uq UNIQUE (email)
+);
+
+DROP TABLE IF EXISTS status;
+CREATE TABLE status
+(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name VARCHAR(50) NOT NULL DEFAULT '',
+	CONSTRAINT status_name_uq UNIQUE (name)
+);
+
+INSERT INTO status (name)
+VALUES ('new'), ('in progress'), ('completed');
+
+DROP TABLE IF EXISTS tasks;
+create table tasks
+(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	title VARCHAR(100) NOT NULL DEFAULT '',
+	description TEXT NOT NULL DEFAULT '',
+	status_id INT DEFAULT 1,
+	user_id INT NOT NULL,
+	FOREIGN KEY (status_id) REFERENCES status(id)
+		ON DELETE SET NULL
+		ON UPDATE CASCADE,
+	FOREIGN KEY(user_id) REFERENCES users(id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
